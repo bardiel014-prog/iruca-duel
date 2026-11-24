@@ -331,7 +331,7 @@
   <div class="rr-reward-notice" role="status" hidden></div>
   <div class="rr-options"></div>
   <ul class="rr-move-preview" aria-label="選んだ技の結果予測" aria-live="polite" hidden></ul>
-  <div class="rr-footer"><button type="button" class="rr-commit cursor-interaction" hidden>確定</button><button type="button" class="rr-tutorial cursor-interaction">遊び方を試す</button></div>
+  <div class="rr-footer"><button type="button" class="rr-commit cursor-interaction" hidden>確定</button><button type="button" class="rr-reselect cursor-interaction" hidden>剣士選択へ</button><button type="button" class="rr-tutorial cursor-interaction">遊び方を試す</button></div>
  </div>
  <details class="rr-debug" id="rr-debug-panel" hidden>
   <summary>デバッグモード</summary>
@@ -509,7 +509,7 @@ function showOpening() {
 $('.rr-enter-battle').onclick = () => {
   if (online) { friendRequest('ready'); return; }
   clearOpening();
-  ($('.rr-move:not(:disabled)') || $('.rr-navback')).focus({preventScroll:true});
+  ($('.rr-move:not(:disabled)') || $('.rr-navback')).focus({preventScroll:true, focusVisible:false});
 };
 function battleSideLabel(side) {
   return side === you ? 'あなた' : online ? '相手' : 'CPU';
@@ -524,6 +524,35 @@ function passiveStatus(id, player, opponent, isAttacking) {
     case 5: return ['強襲・反撃が通ると札回収', isAttacking ? player.heavy > 0 : player.counter > 0];
   }
 }
+/* ターン結果の見出し。観戦者視点の「成功」ではなく、遊んでいる本人から見た言葉にする */
+function turnHeadline(loss, defense, strong) {
+  if (you === null) {
+    const hit = loss[0] || loss[1];
+    return hit ? (strong ? '強成功' : '成功') + ' · 攻撃が通った' : (defense === 'dodge' ? '回避成功' : 'ダメージなし');
+  }
+  const mine = loss[you], theirs = loss[1-you];
+  const youAttacked = attacker === you;
+  if (mine && theirs) return '相打ち';
+  if (theirs) {
+    if (!youAttacked && defense === 'counter') return 'カウンター成立';
+    return (strong ? '強打' : '攻撃成功') + ' · 相手のライフ−' + theirs;
+  }
+  if (mine) {
+    if (youAttacked && defense === 'counter') return 'カウンターされた';
+    return '被弾 · ライフ−' + mine;
+  }
+  if (defense === 'dodge') return youAttacked ? '回避された' : '回避成功';
+  return youAttacked ? '防がれた' : '防御成功';
+}
+function matchEndReason() {
+  const diff = players[1-you].damage - players[you].damage;
+  const verdict = diff > 0 ? '勝利' : diff < 0 ? '敗北' : '引き分け';
+  if (players.some(item => item.damage === cap)) {
+    if (players.every(item => item.damage === cap)) return '同時にライフ0 · 引き分け';
+    return (diff > 0 ? '相手のライフ0' : 'ライフ0') + ' · ' + verdict;
+  }
+  return limit + 'ターン終了 · ライフ差で' + verdict + '（' + (cap-players[you].damage) + '対' + (cap-players[1-you].damage) + '）';
+}
 function showCutin(attack, defense, previousLife, passiveEffects) {
   clearOpening();
   const overlay = $('.rr-cutin');
@@ -534,8 +563,13 @@ function showCutin(attack, defense, previousLife, passiveEffects) {
   const success = loss[other] > 0;
   const strong = loss[other] >= 3;
   const reflected = damageDealer === receiver && defense === 'counter';
-  overlay.querySelector('h3').textContent = success ? (strong ? '強成功' : '成功') + (reflected ? ' · カウンター成立' : ' · 攻撃が通った') : (defense === 'dodge' ? '回避成功' : 'ダメージなし');
+  overlay.querySelector('h3').textContent = turnHeadline(loss, defense, strong);
   overlay.querySelector('p').textContent = labels[attack]+' × '+labels[defense];
+  if (phase === 'done' && !tutorial && you !== null) {
+    // 決着画面では「なぜ決着したか」を見出しにし、最終ターンの結果は補足に回す
+    overlay.querySelector('h3').textContent = matchEndReason();
+    overlay.querySelector('p').textContent = '最終ターン：'+turnHeadline(loss, defense, strong)+'（'+labels[attack]+' × '+labels[defense]+'）';
+  }
   const rows = [damageDealer,other].map((side,i)=>{
     const row = document.createElement('div');
     row.className='rr-cut-row';
@@ -575,7 +609,7 @@ function dismissCutin(next) {
     $('.rr-game').classList.remove('rr-judgment');
     next();
     const target = phase === 'lobby' ? $('[data-pick="'+preview+'"]') : $('.rr-move:not(:disabled)') || $('.rr-commit');
-    target.focus();
+    target.focus({focusVisible:false});
   },240);
 }
 // Only aggregate game events; never send URLs, names, IPs or visitor IDs.
@@ -824,7 +858,12 @@ function render() {
     passive.textContent = '◇ '+passives[fighters[side]];
     if (you !== null) {
       const [status, active] = passiveStatus(fighters[side],p,players[1-side],attacker===side);
-      passive.textContent = (active ? '✦ ' : '◇ ')+passives[fighters[side]]+' · '+status;
+      passive.textContent = (active ? '✦ ' : '◇ ')+passives[fighters[side]];
+      if (status) {
+        const detail = document.createElement('small');
+        detail.textContent = status;
+        passive.append(detail);
+      }
       passive.toggleAttribute('data-active',active);
     }
     const isIris = fighters[side] === 3;
@@ -908,7 +947,9 @@ function render() {
   const commit = $('.rr-commit');
   commit.hidden = phase === 'waiting';
   commit.disabled = options.length>0 && !selection || Boolean(online?.acknowledged[online.seat]);
-  commit.textContent = phase === 'lobby' ? roster[preview][0]+'で対戦開始' : phase === 'result' ? '次のターンへ' : phase === 'done' ? (online ? '再戦する' : '剣士選択へ') : '確定';
+  commit.textContent = phase === 'lobby' ? roster[preview][0]+'で対戦開始' : phase === 'result' ? '次のターンへ' : phase === 'done' ? (online ? '再戦する' : tutorial ? '剣士選択へ' : 'もう一戦') : '確定';
+  // CPU戦の決着後は「もう一戦」（同じ組み合わせで再戦）を主ボタンにし、剣士選択は脇に置く
+  $('.rr-reselect').hidden = !(phase === 'done' && !online && !tutorial);
   $('.rr-log').hidden = history.length===0;
   $('.rr-log ol').replaceChildren(...history.slice().reverse().map(entry=>{
     const li=document.createElement('li'); li.textContent=entry; return li;
@@ -946,7 +987,7 @@ $('.rr-tutorial').onclick=()=>{
     $('.rr-tutorial').focus();
   } else if (phase === 'lobby') {
     start(0,true);
-    $('.rr-move:not(:disabled)').focus();
+    $('.rr-move:not(:disabled)').focus({focusVisible:false});
   }
 };
 $('.rr-commit').onclick=()=>{
@@ -968,9 +1009,9 @@ $('.rr-commit').onclick=()=>{
     render();
   } else if ((phase === 'defend' || phase === 'reveal') && selection) settle(cpuAttack,selection);
   else if (phase === 'result') { dismissCutin(()=>{turn++; attacker=1-attacker; ready();}); return; }
-  else if (phase === 'done') { dismissCutin(lobby); return; }
+  else if (phase === 'done') { dismissCutin(tutorial ? lobby : ()=>start(fighters[you])); return; }
   const target = phase === 'lobby' ? $('[data-pick="'+preview+'"]') : $('.rr-move:not(:disabled)') || $('.rr-commit');
-  target.focus();
+  target.focus({focusVisible:false});
 };
 const debugPanel = $('.rr-debug');
 const debugEntry = $('.rr-debug-entry');
@@ -1141,6 +1182,10 @@ function showWinPath() {
   $('.rr-commit').textContent = 'この剣士でCPU戦';
 }
 $('.rr-tabs').addEventListener('click', showWinPath);
+$('.rr-reselect').onclick = () => {
+  if (cutTimer !== null || phase !== 'done') return;
+  dismissCutin(lobby);
+};
 const startMatch = $('.rr-commit').onclick;
 $('.rr-commit').onclick = event => {
   if (!$('.rr-opening').hidden || cutTimer !== null) return;
@@ -1401,5 +1446,18 @@ render();
 </div>
 
 </main>
+<style>
+/* スマホ縦向けの調整（後勝ちで上書き） */
+/* 角丸の切り抜きは clip にする（hidden だとスクロールコンテナ扱いになり sticky が効かない） */
+#rose-play-v17-debug .rr-phone{overflow:clip}
+#rose-play-v17-debug .rr-footer{position:sticky;bottom:0;z-index:6;margin:8px -12px -13px;padding:8px 12px calc(10px + env(safe-area-inset-bottom));background:#251826;box-shadow:0 -8px 16px rgba(0,0,0,.45)}
+#rose-play-v17-debug .rr-footer button{white-space:nowrap;min-width:0}
+#rose-play-v17-debug .rr-footer .rr-commit{flex:2}
+#rose-play-v17-debug .rr-game-nav{margin:4px 12px}
+#rose-play-v17-debug .rr-navback{min-height:36px;padding:4px 12px}
+#rose-play-v17-debug .rr-passive small{display:block;font-size:11px;opacity:.85;overflow-wrap:anywhere}
+#rose-play-v17-debug [data-home]:disabled{opacity:.5;cursor:not-allowed}
+#rose-play-v17-debug [data-home]:disabled small{display:inline-block;margin-left:6px;padding:0 6px;border:1px solid currentColor;border-radius:4px}
+</style>
 </body>
 </html>
