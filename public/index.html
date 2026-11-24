@@ -1,0 +1,1405 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1d1420">
+<meta name="description" content="6人の剣姫から選ぶ、読み合いの剣術対戦ゲーム。">
+<title>剣姫の一手 | Iruca</title>
+<style>body{margin:0;background:#171018;min-height:100vh}main{max-width:680px;margin:auto}.duel-metrics-note{max-width:432px;margin:12px auto;padding:12px;color:#cbbcc8;font:12px/1.7 sans-serif}
+</style>
+</head>
+<body>
+<main>
+<div class="viz-dotted-background" id="rose-play-v17-debug">
+<style>
+#rose-play-v17-debug{padding:14px;display:grid;justify-items:center;color:#fff0eb;font:14px/1.5 system-ui,sans-serif}
+#rose-play-v17-debug *{box-sizing:border-box}#rose-play-v17-debug [hidden]{display:none!important}
+#rose-play-v17-debug .rr-phone{width:min(100%,432px);background:#1d1420;border:1px solid #785264;border-radius:21px;overflow:hidden;box-shadow:0 12px 28px #190e2450}
+#rose-play-v17-debug .rr-head{padding:14px 16px 11px;background:#291c2a;display:flex;align-items:center;justify-content:space-between;gap:8px}
+#rose-play-v17-debug .rr-brand{display:block;width:min(65%,232px);height:auto;min-width:0;object-fit:contain}#rose-play-v17-debug #rp-version{flex-shrink:0;white-space:nowrap}#rose-play-v17-debug small{font-size:11px;color:#e5c5ce}
+#rose-play-v17-debug .rr-tabs{display:flex;gap:5px;padding:5px 12px 10px;background:#291c2a}
+#rose-play-v17-debug button{font:inherit;color:inherit;background:#382737;border:1px solid #68495d;border-radius:9px;min-height:44px}
+#rose-play-v17-debug button[aria-pressed=true]{background:#f1c0cf;border-color:#f1c0cf;color:#281925}
+#rose-play-v17-debug .rr-tabs button{flex:1;font-size:12px;padding:4px}
+#rose-play-v17-debug .rr-art{position:relative;display:grid;grid-template-columns:1fr 1fr;isolation:isolate}
+#rose-play-v17-debug .rr-fighter{background-size:cover;background-position:center 24%;height:190px;padding:9px;display:flex;flex-direction:column;justify-content:space-between}
+#rose-play-v17-debug .rr-a{background-image:linear-gradient(0deg,#190e1af5,transparent 54%),none}
+#rose-play-v17-debug .rr-b{background-image:linear-gradient(0deg,#190e1af5,transparent 54%),none;text-align:right;border-left:1px solid #ac809d}
+#rose-play-v17-debug .rr-role{border-radius:5px;background:#211420;color:#ffdee8;padding:3px 7px;width:max-content;font-size:11px}
+#rose-play-v17-debug .rr-b .rr-role{align-self:end}#rose-play-v17-debug .rr-name{font-size:16px;line-height:1.1;margin:0 0 4px;text-shadow:0 1px 3px #000}
+#rose-play-v17-debug .rr-pips{display:flex;gap:3px;margin:5px 0}#rose-play-v17-debug .rr-b .rr-pips{justify-content:flex-end}
+#rose-play-v17-debug .rr-pips i{height:4px;width:16px;border-radius:2px;background:#efafc4}
+#rose-play-v17-debug .rr-b .rr-pips i:not(.rr-broken){background:#b5dbc9}#rose-play-v17-debug .rr-pips .rr-broken{background:#715b6a}
+#rose-play-v17-debug .rr-cloth{font-size:11px;color:#f8e0e6}#rose-play-v17-debug .rr-versus{position:absolute;top:51%;left:50%;transform:translate(-50%,-50%);background:#281b29;border:1px solid #a37a86;border-radius:50%;padding:5px 7px;font:500 12px Georgia;color:#ffdfa9}
+#rose-play-v17-debug .rr-status{display:flex;justify-content:space-between;gap:4px;padding:7px 11px;background:#291c2a;color:#ecd8e4;font-size:11px}
+#rose-play-v17-debug .rr-board{padding:11px 12px 13px}#rose-play-v17-debug h3{font:500 17px system-ui;margin:0 0 3px;color:#fff0eb}
+#rose-play-v17-debug p{margin:0 0 8px;color:#dfc1d1;font-size:12px}
+#rose-play-v17-debug .rr-options{display:grid;gap:6px}
+#rose-play-v17-debug .rr-move{width:100%;padding:7px 9px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:6px;white-space:nowrap}
+#rose-play-v17-debug .rr-move[aria-pressed=true]{background:#57374b;color:#fff2f2;border-color:#f7b8cd}
+#rose-play-v17-debug .rr-move b{font-weight:650;color:#ffdae6}#rose-play-v17-debug .rr-move small{margin-left:6px}
+#rose-play-v17-debug .rr-move-preview{list-style:none;margin:4px 0 0;padding:0 8px;background:#291c2a;border:1px solid #604756;border-radius:7px;font-size:12px}
+#rose-play-v17-debug .rr-move-preview li{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 8px;padding:5px 0}
+#rose-play-v17-debug .rr-move-preview li+li{border-top:1px solid #513c4e}
+#rose-play-v17-debug .rr-preview-move{color:#f2d7e4;font-weight:650}
+#rose-play-v17-debug .rr-preview-opponent{color:#ff9c9c;font-weight:650}
+#rose-play-v17-debug .rr-preview-self{color:#9dccff;font-weight:650}
+#rose-play-v17-debug .rr-preview-passive{color:#ffdfa9}
+#rose-play-v17-debug .rr-risk{color:#ffd2a4}
+#rose-play-v17-debug .rr-footer{display:flex;gap:7px;margin-top:8px}#rose-play-v17-debug .rr-footer button{flex:1}
+#rose-play-v17-debug .rr-footer .rr-commit{background:#f1bdcf;border-color:#f1bdcf;color:#271721;font-weight:650}
+#rose-play-v17-debug .rr-footer .rr-commit:disabled{background:#423141;border-color:#634c5c;color:#d2b9c9}
+#rose-play-v17-debug .rr-event{border-left:2px solid #eec691;padding:8px;background:#372734;color:#ffe6be;margin:6px 0}
+#rose-play-v17-debug .rr-reward-notice{color:#ffe0ac}
+#rose-play-v17-debug .rr-note{padding:7px 12px;border-top:1px solid #553d4d;font-size:11px;color:#d9baca}
+@media(max-width:360px){#rose-play-v17-debug{padding:4px}#rose-play-v17-debug .rr-fighter{height:170px}}
+ 
+#rose-play-v17-debug .rr-fighter{position:relative}
+#rose-play-v17-debug .rr-stamp{font-size:11px;color:#ffd3a5}#rose-play-v17-debug .rr-log{padding:0 12px 10px;font-size:11px;color:#e5c5ce}#rose-play-v17-debug .rr-log summary{padding:5px 0}
+
+#rose-play-v17-debug .rr-fighter.rr-active{box-shadow:inset 0 4px #f4cc9a}
+#rose-play-v17-debug .rr-active .rr-role{background:#f4cc9a;color:#2c1c28;font-weight:700}
+#rose-play-v17-debug .rr-flow{display:grid;gap:1px;text-align:center;background:#412a3e;color:#ffe9c8;padding:6px 10px;border-bottom:1px solid #68495d}
+#rose-play-v17-debug .rr-opening{position:relative;isolation:isolate;overflow:hidden;display:grid;place-items:center;align-content:center;gap:8px;min-height:245px;padding:20px 10px;text-align:center;color:#fff2d1;border-block:1px solid #c8a46a;background:radial-gradient(ellipse at center,#723c4d,#190e1a 75%)}
+#rose-play-v17-debug .rr-opening::before{content:"";position:absolute;inset:0;z-index:-1;background-image:linear-gradient(90deg,#150c16df,#22112460,#150c16e8),var(--rr-scene-art,none);background-size:cover;background-position:center,center 13%;opacity:.75}
+#rose-play-v17-debug .rr-scene-title-art{display:block;width:min(78vw,275px);height:130px;object-fit:contain;margin-inline:auto}
+#rose-play-v17-debug .rr-countdown{display:flex;align-items:center;gap:10px;padding:5px 12px;background:#291c2a;color:#fff6e8;font-variant-numeric:tabular-nums}
+#rose-play-v17-debug .rr-countdown span{min-width:7.5em}
+#rose-play-v17-debug .rr-countdown[data-owner="opponent"] progress{accent-color:#69abff}
+#rose-play-v17-debug .rr-countdown progress{flex:1;min-width:0;accent-color:#f2757d}
+#rose-play-v17-debug .rr-friend-invite input{width:100%;margin:4px 0 8px}
+#rose-play-v17-debug .rr-friend-select select{margin:4px 0 8px}
+#rose-play-v17-debug .rr-opening[data-stage="start"] .rr-coin-stage{display:none}
+#rose-play-v17-debug .rr-opening strong{grid-row:2}
+#rose-play-v17-debug .rr-opening .rr-coin-stage{grid-row:3}
+#rose-play-v17-debug .rr-opening strong,#rose-play-v17-debug .rr-opening small{color:#fff6e8;text-shadow:0 2px 4px #000;background:#201622;padding:4px 10px;border-radius:7px}
+#rose-play-v17-debug .rr-opening[data-stage="start"] strong:has(img){background:transparent}
+#rose-play-v17-debug .rr-opening .rr-enter-battle{min-height:44px;background:#f4d2a0;color:#231621;border-color:#f4d2a0}
+#rose-play-v17-debug .rr-flow[data-role="attack"]{background:#682a32;color:#fff7ef;border-color:#c77d83}
+#rose-play-v17-debug .rr-flow[data-role="defense"]{background:#23466f;color:#f2f8ff;border-color:#729dc7}
+#rose-play-v17-debug .rr-flow[data-role] small{color:inherit}
+#rose-play-v17-debug .rr-versus:has(img){border:0;background:none;padding:0}
+#rose-play-v17-debug .rr-versus img{display:block;width:86px;height:60px;object-fit:contain;filter:drop-shadow(0 2px 5px #000)}
+#rose-play-v17-debug #rp-title .rr-scene-title-art{height:112px}
+#rose-play-v17-debug #rp-title:has(img){text-align:center}
+#rose-play-v17-debug .rr-opening strong{font-size:clamp(24px,7vw,34px);text-shadow:0 2px 12px #210e17}
+#rose-play-v17-debug .rr-opening small{letter-spacing:.24em;color:#f5d69e}
+#rose-play-v17-debug .rr-coin-stage{perspective:420px;padding:16px 0 6px}
+#rose-play-v17-debug .rr-coin{position:relative;display:block;width:88px;height:88px;transform-style:preserve-3d}
+#rose-play-v17-debug .rr-coin span{position:absolute;inset:0;display:grid;place-items:center;border:3px double #ffeac0;border-radius:50%;backface-visibility:hidden;background:radial-gradient(circle at 34% 28%,#fff3b9,#d5a058 59%,#965c32);box-shadow:inset 0 0 0 5px #a56c39,inset 0 0 0 7px #e4ba73,0 0 26px #ffbc5f66;color:#53261c;font-size:36px}
+#rose-play-v17-debug .rr-coin span+span{transform:rotateY(180deg)}
+#rose-play-v17-debug .rr-coin[data-face="back"]{transform:rotateY(180deg)}
+#rose-play-v17-debug .rr-tossing .rr-coin{animation:rrCoinToss 1.1s cubic-bezier(.2,.65,.38,1) both}
+#rose-play-v17-debug .rr-reveal-opening strong{animation:rrSceneTitle .28s ease-out both}
+#rose-play-v17-debug .rr-opening-active :is(.rr-art,.rr-status,.rr-flow,.rr-board,.rr-log,.rr-note){display:none}
+@keyframes rrCoinToss{0%{transform:translateY(10px) rotateY(0deg) scale(.84)}42%{transform:translateY(-27px) rotateY(750deg) scale(1.14)}100%{transform:translateY(0) rotateY(var(--rr-coin-spin,1440deg)) scale(1)}}
+@keyframes rrSceneTitle{from{opacity:0;transform:scale(.86)}to{opacity:1;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){#rose-play-v17-debug :is(.rr-tossing .rr-coin,.rr-reveal-opening strong){animation:none}}
+#rose-play-v17-debug .rr-flow small{color:#f4d1dd}
+#rose-play-v17-debug .rr-flow.rr-enter{animation:rrTurnIn .42s ease-out}
+@keyframes rrTurnIn{from{opacity:.42;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){#rose-play-v17-debug .rr-flow.rr-enter{animation:none}}
+
+#rose-play-v17-debug .rr-guide{margin-top:8px;padding:9px 10px;border:1px solid #68495d;border-radius:9px;background:#352436}
+#rose-play-v17-debug .rr-guide strong{display:block;color:#ffdeb5;margin-bottom:6px}
+#rose-play-v17-debug .rr-guide p{margin:0 0 4px;color:#f4dce6}
+#rose-play-v17-debug .rr-guide p:last-child{margin:0}
+
+#rose-play-v17-debug .rr-lesson{border-left:2px solid #f2ca92;padding:6px 9px;margin:7px 0;background:#3b2936;color:#fff0d5}
+#rose-play-v17-debug .rr-lesson p{margin:3px 0 0;color:#f6dfd4}
+#rose-play-v17-debug .rr-move:disabled{opacity:.54}
+
+#rose-play-v17-debug .rr-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+#rose-play-v17-debug .rr-cpu{display:flex;align-items:center;gap:8px;margin:0 0 8px}
+#rose-play-v17-debug select{flex:1;min-width:0;min-height:44px;background:#382737;color:#fff0eb;border:1px solid #785264;border-radius:8px;padding:5px;font:inherit}
+#rose-play-v17-debug .rr-fighter{background-image:linear-gradient(0deg,#190e1af5,transparent 54%),var(--rr-portrait)}
+
+#rose-play-v17-debug .rr-status{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+#rose-play-v17-debug .rr-hand{min-width:0;background:#261a28;padding:6px;border-radius:7px}
+#rose-play-v17-debug .rr-passive{display:block;padding:3px 5px;margin-bottom:4px;border-radius:4px;background:#352739;color:#e7cbe6;font-size:12px;overflow-wrap:anywhere}
+#rose-play-v17-debug .rr-passive[data-active]{background:#4b3422;color:#ffdf9e;box-shadow:inset 0 0 0 1px #af8050}
+#rose-play-v17-debug .rr-handrow{display:flex;align-items:center;justify-content:space-between;gap:3px;margin-top:3px;min-height:23px}
+#rose-play-v17-debug .rr-handrow>span:first-child{overflow-wrap:anywhere}
+#rose-play-v17-debug .rr-cards{display:flex;gap:2px;flex-shrink:0;align-items:center}
+#rose-play-v17-debug .rr-token{display:grid;place-items:center;width:13px;height:19px;font-size:9px;line-height:1;border:1px solid #a48799;border-radius:3px;background:#ead4df;color:#31202e}
+#rose-play-v17-debug .rr-handrow.rr-skill .rr-token{background:#efce9c;border-color:#efce9c}
+#rose-play-v17-debug .rr-handrow .rr-token.rr-spent{background:#2e2430;color:#b49aab;border-color:#6c5367;border-style:dashed}
+#rose-play-v17-debug .rr-kit{display:grid;gap:4px;margin-bottom:6px;color:#f4d6df;font-size:12px}
+
+#rose-play-v17-debug .rr-lock{display:block;color:#edcc9f;font-size:11px;margin-top:3px}
+#rose-play-v17-debug .rr-handrow .rr-token.rr-locked{background:#4b3943;border-color:#ba926d;color:#ffe0b3}
+
+#rose-play-v17-debug .rr-cost{padding:2px 4px;border-radius:4px;background:#4a3039;color:#ffe1ae;font-size:clamp(9px,2.7vw,11px);line-height:1.45}
+
+#rose-play-v17-debug .rr-fighter{height:auto;aspect-ratio:1;background-position:center,center 12%}
+#rose-play-v17-debug .rr-fighter.rr-critical{background-size:cover,130% auto;background-position:center,var(--rr-crop)}
+
+#rose-play-v17-debug .rr-debug{margin:8px 12px 12px;padding:8px;border:1px solid #785264;border-radius:8px}
+#rose-play-v17-debug .rr-debug summary{cursor:pointer;color:#f4cc9a}
+#rose-play-v17-debug .rr-debug-controls{display:grid;gap:8px;margin-top:8px}
+#rose-play-v17-debug .rr-debug-controls label{display:flex;gap:8px;align-items:center;justify-content:space-between}
+#rose-play-v17-debug .rr-debug-controls input{width:42%;min-width:70px}
+#rose-play-v17-debug .rr-debug-actions{display:flex;flex-wrap:wrap;gap:6px}
+
+#rose-play-v17-debug .rr-fighter.rr-b{isolation:isolate;overflow:hidden;background-image:none}
+#rose-play-v17-debug .rr-fighter.rr-b::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background-image:linear-gradient(0deg,#190e1af5,transparent 54%),var(--rr-portrait);
+  background-size:cover;background-position:center,center 12%;background-repeat:no-repeat;
+  transform:scaleX(-1);
+}
+#rose-play-v17-debug .rr-fighter.rr-b.rr-critical::before{
+  background-size:cover,130% auto;
+  background-position:center,var(--rr-crop);
+}
+
+#rose-play-v17-debug .rr-online-status{padding:0 12px}
+#rose-play-v17-debug .rr-home{padding:18px;display:grid;gap:10px;background:radial-gradient(ellipse at top,#543243,#201522 68%)}
+#rose-play-v17-debug .rr-home h2,#rose-play-v17-debug .rr-home p{margin:0}
+#rose-play-v17-debug .rr-home button{display:block;text-align:left;padding:9px 12px}
+#rose-play-v17-debug .rr-home button small{display:block}
+#rose-play-v17-debug .rr-related{font-size:12px;text-align:center}
+#rose-play-v17-debug .rr-related a{color:#ffcedc;text-decoration:underline}
+#rose-play-v17-debug .rr-game-nav{display:flex;justify-content:space-between;margin:8px 12px}
+#rose-play-v17-debug .rr-game-nav .rr-debug-entry{width:44px;opacity:0}
+#rose-play-v17-debug [data-intro] .rr-cpu,#rose-play-v17-debug [data-intro] .rr-tutorial{display:none}
+
+#rose-play-v17-debug [data-intro] :is(.rr-art,.rr-guide:not(.rr-intro-guide),.rr-note){display:none}
+#rose-play-v17-debug .rr-game:not([data-intro]) :is(.rr-intro-sheet,.rr-intro-guide){display:none}
+#rose-play-v17-debug .rr-intro-sheet{display:block;width:100%;padding:0;border:0;border-radius:0;cursor:zoom-in}
+#rose-play-v17-debug .rr-intro-sheet img{display:block;width:100%;height:auto;aspect-ratio:16/9}
+#rose-play-v17-debug .rr-intro-sheet span{display:block;padding:5px 12px;text-align:right}
+#rose-play-v17-debug .rr-intro-dialog{width:min(96vw,1200px);max-height:96dvh;overflow:auto;padding:8px;border:1px solid #785264;border-radius:10px;background:#211420;color:#fff0eb}
+#rose-play-v17-debug .rr-intro-dialog::backdrop{background:#100a14dd}
+#rose-play-v17-debug .rr-intro-dialog form{position:sticky;left:0;text-align:right}
+#rose-play-v17-debug .rr-intro-dialog img{display:block;width:100%;min-width:720px;height:auto}
+#rose-play-v17-debug .rr-intro-guide h4{margin:0 0 4px;color:#ffdeb5}
+#rose-play-v17-debug .rr-intro-guide details{margin-top:10px}
+#rose-play-v17-debug .rr-intro-guide summary{cursor:pointer}
+#rose-play-v17-debug .rr-intro-guide dl{margin:8px 0 0}
+#rose-play-v17-debug .rr-intro-guide dt{font-weight:700;color:#ffdeb5}
+#rose-play-v17-debug .rr-intro-guide dd{margin:0 0 7px}
+#rose-play-v17-debug .rr-kit section{padding:8px;border:1px solid #99704d;border-radius:8px;background:#392838}
+#rose-play-v17-debug .rr-kit section+section{border-color:#7d789d;background:#2e293e}
+#rose-play-v17-debug .rr-kit span{display:block;font-weight:700;color:#fff0cf}
+#rose-play-v17-debug .rr-rules{padding:9px;border:1px solid #785264;border-radius:8px}
+#rose-play-v17-debug .rr-rules summary{cursor:pointer}
+#rose-play-v17-debug .rr-rules p{margin:7px 0}
+#rose-play-v17-debug .rr-flowline{display:flex;align-items:center;flex-wrap:wrap;gap:5px;font-size:12px}
+#rose-play-v17-debug .rr-flowline b,#rose-play-v17-debug .rr-matchup strong{padding:3px 8px;border-radius:5px;background:#563948;color:#ffdeb5}
+#rose-play-v17-debug .rr-matchup{margin:8px 0;text-align:center;padding:6px;border:1px solid #785264;border-radius:8px}
+#rose-play-v17-debug .rr-matchup strong{display:inline-block}
+#rose-play-v17-debug .rr-branches{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding-top:14px}
+#rose-play-v17-debug .rr-branches::before{content:"";position:absolute;top:0;left:16.7%;right:16.7%;height:12px;border-bottom:1px solid #ba926d;background:linear-gradient(#ba926d,#ba926d) center/1px 100% no-repeat}
+#rose-play-v17-debug .rr-branches>div{position:relative;background:#392838;border-radius:5px;padding:4px}
+#rose-play-v17-debug .rr-branches>div::before{content:"";position:absolute;bottom:100%;left:50%;height:4px;border-left:1px solid #ba926d}
+#rose-play-v17-debug .rr-branches b{display:block;color:#ffdeb5}
+#rose-play-v17-debug .rr-key span,#rose-play-v17-debug .rr-branches b{padding:3px 6px;border-radius:4px}
+#rose-play-v17-debug .rr-key span{display:inline-block;font-size:11px}
+#rose-play-v17-debug .rr-rules .rr-hit-a{background:#702f42;color:#ffe0e9}
+#rose-play-v17-debug .rr-rules .rr-hit-b{background:#244b70;color:#dff2ff}
+#rose-play-v17-debug .rr-rules .rr-hit-none{background:#423b46;color:#f0e8f0}
+
+#rose-play-v17-debug .rr-game{position:relative}
+#rose-play-v17-debug .rr-cutin{overflow:hidden;padding:8px;margin:8px 0;background:#201522;border-radius:8px;text-align:center;transition:opacity .24s}
+#rose-play-v17-debug .rr-cutin h3,#rose-play-v17-debug .rr-cutin p{margin:2px 0 6px}
+#rose-play-v17-debug .rr-passive-results{display:grid;gap:4px;margin:6px 0 0;padding:0;list-style:none}
+#rose-play-v17-debug .rr-passive-results li{padding:4px 6px;border:1px solid #99704d;border-radius:5px;background:#352436;color:#ffe0ac;font-size:12px}
+#rose-play-v17-debug .rr-cut-row{--entry:-100%;aspect-ratio:4;position:relative;background-size:100% 600%;border:1px solid #bfa284;animation:rr-cut .32s ease-out both}
+#rose-play-v17-debug .rr-cut-row[data-side="1"]{--entry:100%}
+#rose-play-v17-debug .rr-cut-row[data-strong]{border:2px solid #ffc769}
+#rose-play-v17-debug .rr-cut-row b{position:absolute;bottom:4px;left:4px;padding:2px 5px;font-size:12px;background:rgb(34 19 33 / 46%);color:rgb(255 255 255 / 92%);text-shadow:0 1px 2px #190e1a}
+#rose-play-v17-debug .rr-cut-row[data-side="1"] b{left:auto;right:4px}
+@keyframes rr-cut{0%{transform:translateX(var(--entry));opacity:0}100%{transform:translateX(0);opacity:1}}
+#rose-play-v17-debug .rr-cutin.rr-exit{opacity:0}
+#rose-play-v17-debug .rr-game.rr-judgment :is(.rr-art,.rr-status,.rr-flow,#rp-event,#rp-context){display:none}
+@media(prefers-reduced-motion:reduce){#rose-play-v17-debug .rr-cut-row{animation:none}}
+#rose-play-v17-debug .rr-game:not([data-intro]) .rr-fighter,
+#rose-play-v17-debug .rr-game:not([data-intro]) .rr-fighter.rr-b::before{
+  background-size:cover,var(--rr-portrait-size,100% auto);
+  background-position:center,var(--rr-crop,center 12%);
+}
+#rose-play-v17-debug .rr-album{padding:14px 12px;background:radial-gradient(ellipse at top,#543243,#201522 68%)}
+#rose-play-v17-debug .rr-album h2{margin:10px 0 2px}
+#rose-play-v17-debug .rr-album-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+#rose-play-v17-debug .rr-album-grid button{min-width:0;padding:6px 3px;overflow-wrap:anywhere}
+#rose-play-v17-debug .rr-album-grid button:disabled{opacity:.65}
+#rose-play-v17-debug .rr-album-head{display:flex;align-items:center;justify-content:space-between;gap:6px}
+#rose-play-v17-debug .rr-album-head p{margin:0}
+#rose-play-v17-debug .rr-album-fighters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;margin:8px 0}
+#rose-play-v17-debug .rr-album-fighters button{min-width:0;padding:2px;overflow-wrap:anywhere}
+#rose-play-v17-debug .rr-album-fighters small{display:block;color:inherit}
+#rose-play-v17-debug .rr-album-grid button{display:grid;align-content:start;gap:4px}
+#rose-play-v17-debug .rr-album-thumb{display:grid;place-items:center;aspect-ratio:2/3;overflow:hidden;border-radius:5px;background:#211420;color:#ffe0ac}
+#rose-play-v17-debug .rr-album-thumb img{width:100%;height:100%;object-fit:cover}
+#rose-play-v17-debug .rr-album-dialog{width:min(94vw,480px);max-height:94dvh;padding:8px;border:1px solid #785264;border-radius:10px;background:#211420;color:#fff0eb}
+#rose-play-v17-debug .rr-album-dialog::backdrop{background:#100a14cc}
+#rose-play-v17-debug .rr-album-dialog form{text-align:right}
+#rose-play-v17-debug .rr-album-dialog img{max-height:calc(94dvh - 105px);object-fit:contain}
+#rose-play-v17-debug .rr-album-grid small{display:block;color:inherit}
+#rose-play-v17-debug .rr-album figure{margin:12px 0 0}
+#rose-play-v17-debug .rr-album figure img{display:block;width:100%;height:auto;border-radius:10px}
+#rose-play-v17-debug .rr-album figcaption{margin-top:4px;text-align:center;color:#ffe0ac}
+</style>
+<section class="rr-phone" aria-label="剣姫の一手">
+ <div class="rr-head"><img class="rr-brand" src="data:image/webp;base64,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" alt="剣姫の一手" width="640" height="121"><small id="rp-version">v1.0.0</small></div>
+ <nav class="rr-home" aria-label="メインメニュー">
+  <h2>読み切れ、その一太刀。</h2>
+  <button type="button" data-home="tutorial">チュートリアル<small>攻め・受け・決着を練習</small></button>
+  <button type="button" data-home="cpu">CPU対戦<small>好きな剣士を選んですぐ対戦</small></button>
+  <button type="button" data-home="friend">フレンド対戦<small>招待リンクを送るだけ</small></button>
+  <button type="button" data-home="random" disabled>ランダム対戦<small>実装予定</small></button>
+  <button type="button" data-home="album">ご褒美ギャラリー<small>CPU戦で解放したイラストを見る</small></button>
+  <button type="button" data-home="roster">剣士紹介<small>6人の強みと勝ち筋</small></button>
+  <details class="rr-rules">
+   <summary>基本ルール</summary>
+   <p>ライフ8で開始。攻めと受けを交互に担当し、相手のライフを0にしたら勝ち。10ターン終了時は残りライフが多い側が勝ち。同時に0、または終了時に同点なら引き分け。</p>
+   <p class="rr-flowline"><b>攻め技を伏せて選ぶ</b> → <b>受けを選ぶ</b> → <b>公開・攻守交代</b></p>
+   <p>強襲とカウンターは基本各2枚。回避は何度でも使えて、牽制とフェイントを無傷でかわす代わりに、通常の強襲を受けるとガードより1点多く受ける。</p>
+   <p class="rr-key"><span class="rr-hit-a">攻め側が減る</span> <span class="rr-hit-b">受け側が減る</span> <span class="rr-hit-none">変化なし</span></p>
+   <section class="rr-matchup" aria-label="強襲の結果"><strong>強襲</strong><div class="rr-branches"><div>ガード<b class="rr-hit-b">受け側 −2</b></div><div>カウンター<b class="rr-hit-a">攻め側 −3</b></div><div>回避<b class="rr-hit-b">受け側 −3</b></div></div></section>
+   <section class="rr-matchup" aria-label="牽制の結果"><strong>牽制</strong><div class="rr-branches"><div>ガード<b class="rr-hit-b">受け側 −1</b></div><div>カウンター<b class="rr-hit-b">受け側 −1</b></div><div>回避<b class="rr-hit-none">変化なし</b></div></div></section>
+   <section class="rr-matchup" aria-label="フェイントの結果"><strong>フェイント</strong><div class="rr-branches"><div>ガード<b class="rr-hit-none">変化なし</b></div><div>カウンター<b class="rr-hit-b">受け側 −2</b></div><div>回避<b class="rr-hit-none">変化なし</b></div></div></section>
+   <small>数字はライフの変化。圧倒と制圧は回避にも2点。静流の心眼で技を見た後はガードかカウンターを選ぶ。</small>
+  </details>
+  <p class="rr-related"><a href="https://iruca.tech/battle/" target="_blank" rel="noopener">紅月闘技会へ</a></p>
+ </nav>
+ <section class="rr-home rr-friend" aria-label="フレンド対戦" hidden>
+  <button type="button" class="rr-friend-back">トップへ</button>
+  <h2>フレンド対戦</h2>
+  <button type="button" class="rr-friend-create">招待リンクを作る</button>
+  <div class="rr-friend-invite" hidden>
+   <label>招待リンク <input readonly></label>
+   <button type="button" class="rr-friend-copy">リンクをコピー</button>
+  </div>
+  <div class="rr-friend-select" hidden>
+   <label>剣士を選ぶ <select></select></label>
+   <button type="button" class="rr-friend-pick">対戦開始</button>
+  </div>
+  <p class="rr-friend-status" role="status"></p>
+ </section>
+ <section class="rr-album" aria-labelledby="rr-album-title" hidden>
+  <div class="rr-album-head">
+   <button type="button" class="rr-album-back">トップへ</button>
+   <p class="rr-album-count"></p>
+  </div>
+  <h2 id="rr-album-title">ご褒美ギャラリー</h2>
+  <div class="rr-album-fighters" role="group" aria-label="剣士を選ぶ"></div>
+  <section class="rr-album-cards" hidden>
+   <h3></h3>
+   <div class="rr-album-grid" role="group" aria-label="ご褒美枠"></div>
+  </section>
+  <dialog class="rr-album-dialog" aria-labelledby="rr-album-caption">
+   <form method="dialog"><button type="submit">閉じる</button></form>
+   <figure><img alt=""><figcaption id="rr-album-caption"></figcaption></figure>
+  </dialog>
+ </section>
+ <div class="rr-game" hidden>
+ <div class="rr-game-nav">
+  <button type="button" class="rr-navback">トップへ</button>
+  <button type="button" class="rr-debug-entry" aria-label="デバッグモード" aria-controls="rr-debug-panel" aria-expanded="false" tabindex="-1" hidden></button>
+ </div>
+ <p class="rr-online-status" role="status" hidden></p>
+ <div class="rr-countdown" hidden><span></span><progress aria-label="対戦の残り時間"></progress></div>
+ <div class="rr-tabs" aria-label="使用キャラ"></div>
+ <button type="button" class="rr-intro-sheet" aria-haspopup="dialog"><img alt=""><span>画像を拡大</span></button>
+ <dialog class="rr-intro-dialog" aria-label="剣士紹介シート">
+  <form method="dialog"><button type="submit">閉じる</button></form>
+  <img alt="">
+ </dialog>
+ <div class="rr-art">
+  <div class="rr-fighter rr-a"><span class="rr-role" data-role="0">重騎士</span><div><div class="rr-name">ヴィオレッタ</div><div class="rr-cloth" data-cloth="0"></div><div class="rr-pips" data-pips="0" aria-hidden="true"></div></div></div>
+  <div class="rr-fighter rr-b"><span class="rr-role" data-role="1">捨て身</span><div><div class="rr-name">ノア</div><div class="rr-cloth" data-cloth="1"></div><div class="rr-pips" data-pips="1" aria-hidden="true"></div></div></div>
+  <span class="rr-versus" aria-hidden="true">VS</span>
+ </div>
+ <div class="rr-opening" hidden><small>先攻・後攻抽選</small><div class="rr-coin-stage" aria-hidden="true"><span class="rr-coin"><span>⚔</span><span>✦</span></span></div><strong role="status"></strong><button type="button" class="rr-enter-battle cursor-interaction" hidden>戦闘へ進む</button></div>
+ <div class="rr-flow" aria-live="polite" hidden><strong></strong><small></small></div>
+ <div class="rr-status"><div class="rr-hand" data-stock="0"></div><div class="rr-hand" data-stock="1"></div></div>
+ <div class="rr-board">
+  <div aria-live="polite"><h3 id="rp-title">剣士を選ぶ</h3><p id="rp-context"></p><div id="rp-event" class="rr-event" hidden></div></div>
+  <label class="rr-cpu">CPUの剣士 <select class="cursor-interaction"></select></label>
+  <section class="rr-guide" aria-live="polite">
+   <strong></strong><div class="rr-kit"><section><small>⚔ アクティブ · 選んで使う</small><span></span><p></p></section><section><small>✦ パッシブ · 条件で発動</small><span></span><p></p></section></div>
+  </section>
+  <section class="rr-guide rr-intro-guide" aria-live="polite">
+   <h4>立ち回り</h4><p></p>
+   <details><summary>技の条件・効果</summary><dl></dl></details>
+  </section>
+  <div class="rr-lesson" aria-live="polite" hidden><strong></strong><p></p></div>
+ <section class="rr-cutin" role="status" hidden><h3></h3><p></p><div></div><ul class="rr-passive-results" aria-label="発動したパッシブ" hidden></ul></section>
+  <div class="rr-reward-notice" role="status" hidden></div>
+  <div class="rr-options"></div>
+  <ul class="rr-move-preview" aria-label="選んだ技の結果予測" aria-live="polite" hidden></ul>
+  <div class="rr-footer"><button type="button" class="rr-commit cursor-interaction" hidden>確定</button><button type="button" class="rr-tutorial cursor-interaction">遊び方を試す</button></div>
+ </div>
+ <details class="rr-debug" id="rr-debug-panel" hidden>
+  <summary>デバッグモード</summary>
+  <div class="rr-debug-controls">
+   <label>自分の剣士 <select data-debug-fighter="0"></select></label>
+   <label>相手の剣士 <select data-debug-fighter="1"></select></label>
+   <label>自分のライフ <input data-debug-damage="0" type="range" min="0" max="8" value="8"><output>8</output></label>
+   <label>相手のライフ <input data-debug-damage="1" type="range" min="0" max="8" value="8"><output>8</output></label>
+   <div class="rr-debug-actions">
+    <button type="button" data-debug-value="3">相手ライフ3</button>
+    <button type="button" data-debug-value="2">相手ライフ2</button>
+    <button type="button" data-debug-reset>リセット</button>
+   </div>
+  </div>
+ </details>
+ <details class="rr-log" hidden><summary class="cursor-interaction">対戦ログ</summary><ol></ol></details>
+ <div class="rr-note">ライフ8で開始・0で敗北・最大10ターン</div>
+</div>
+</section>
+<details class="duel-metrics-note">
+<summary>利用状況の集計について</summary>
+<p>改善のため、表示回数・流入元の種類・画面サイズの区分と、対戦や練習の開始・完了・途中で戻った回数、剣士・勝敗・ターン数をIruca内で集計します。人数ではなく回数の集計です。</p>
+<p>氏名・IPアドレス・閲覧URL・訪問者IDは保存しません。日別の集計は90日、二重送信防止のイベント番号は24時間で削除します。外部の解析サービスには送信しません。</p>
+<label><input id="duel-metrics-opt" type="checkbox"> 匿名の利用集計に参加する</label>
+<p>オフでも遊べます。設定はこのブラウザに保存します。オフにすると以後の送信を停止します。個人を識別できない集計済みの件数は取り消せません。ブラウザの追跡拒否設定が有効な場合は送信しません。</p></details>
+<script type="module">
+import {roster,cap,limit,fresh as freshPlayers,attacks as legalAttacks,defenses as legalDefenses,possible as damageFor,resolve} from './rules-v23-roster.mjs';
+(() => {
+const root = document.getElementById('rose-play-v17-debug');
+const $ = selector => root.querySelector(selector);
+const labels = {heavy:'強襲',quick:'牽制',feint:'フェイント',ignore:'圧倒',blood:'捨て身の強襲',guard:'ガード',counter:'カウンター',dodge:'回避',two:'心眼',chase:'制圧',moon:'返しの月刃',lunar:'月の強襲',lunarArts:'月影',allIn:'大勝負'};
+const titles = ['薔薇の重騎士','捨て身の剣士','居合の侍','蒼鷲の軽騎士','月影の剣匠','札持ちの決闘士'];
+const passives = ['崩し','背水','見切り','先陣','月の構え','イカサマ'];
+const portrait = ["./assets/v1-0-0/violetta-standing.webp","./assets/v1-0-0/noa-standing.webp","./assets/v1-0-0/shizuru-standing.webp","./assets/v1-0-0/iris-standing.webp","./assets/v1-0-0/selene-standing.webp","./assets/v1-0-0/rika-standing.webp"];
+const damagedPortrait = ["./assets/v1-0-0/violetta-damaged-r2.webp","./assets/v1-0-0/noa-damaged-r2.webp","./assets/v1-0-0/shizuru-damaged-r2.webp","./assets/v1-0-0/iris-damaged-r2.webp","./assets/v1-0-0/selene-damaged-r2.webp","./assets/v1-0-0/rika-damaged-r2.webp"];
+const damageStagePortraits = {"2":["./assets/v1-0-0/violetta-damage-2.webp","./assets/v1-0-0/noa-damage-2.webp","./assets/v1-0-0/shizuru-damage-2.webp","./assets/v1-0-0/iris-damage-2.webp","./assets/v1-0-0/selene-damage-2.webp","./assets/v1-0-0/rika-damage-2.webp"],"4":["./assets/v1-0-0/violetta-damage-4.webp","./assets/v1-0-0/noa-damage-4.webp","./assets/v1-0-0/shizuru-damage-4.webp","./assets/v1-0-0/iris-damage-4.webp","./assets/v1-0-0/selene-damage-4.webp","./assets/v1-0-0/rika-damage-4.webp"]};
+const rewardPortrait = ["./assets/v1-0-0/violetta-reward.webp","./assets/v1-0-0/noa-reward.webp","./assets/v1-0-0/shizuru-reward.webp","./assets/v1-0-0/iris-reward.webp","./assets/v1-0-0/selene-reward.webp","./assets/v1-0-0/rika-reward.webp"];
+const rewardIds = ['violetta','noa','shizuru','iris','selene','rika'];
+const relaxReward = rewardIds.map(id=>'./assets/v1-0-0/'+id+'-reward-5.webp');
+const relaxThumb = rewardIds.map(id=>'./assets/v1-0-0/'+id+'-reward-5-thumb.webp');
+const rewardMilestones = [1,5,10];
+const rewardArt = {1:damagedPortrait,5:rewardPortrait,10:relaxReward};
+const rewardWins = new Map();
+let matchRewardWins = 0;
+function rewardKey(id) {
+  return 'kenki:cpu-reward:'+rewardIds[id];
+}
+function rewardWinCount(id) {
+  const sessionWins = rewardWins.get(id) ?? 0;
+  try {
+    const saved = Number(localStorage.getItem(rewardKey(id)));
+    return Number.isSafeInteger(saved) ? Math.max(sessionWins,saved) : sessionWins;
+  } catch {
+    return sessionWins;
+  }
+}
+function recordRewardWin(id) {
+  const wins = rewardWinCount(id)+1;
+  rewardWins.set(id,wins);
+  try {
+    localStorage.setItem(rewardKey(id),String(wins));
+  } catch {
+    // Keep progress for this session when browser storage is blocked.
+  }
+  return wins;
+}
+const introSheets = rewardIds.map(id => `./assets/v1-0-0/${id}-intro.webp`);
+const portraitCrops = [[[189.47,45.88,4.57],[153.85,53.97,31.37],[180.0,37.5,5.88],[163.64,67.14,9.38],[202.25,45.05,12.15],[180.0,35.0,6.47]],[[170.31,73.33,35.18],[185.94,81.82,38.43],[154.69,57.14,24.85],[179.69,80.39,49.77],[154.69,57.14,35.5],[162.5,55.0,29.35]]];
+const guide = [
+ ['崩しと圧倒でライフ差を作る重騎士','崩し｜牽制が初めてガードされたとき、相手のライフを追加で1削る。通常は合計2。','圧倒｜試合中1回。ガード・カウンター・回避にライフ−2。'],
+ ['初手から4点をちらつかせ、相手のカウンター札を削る','背水｜自分のライフが3以下なら、通常強襲と捨て身の強襲をガードされたとき、相手へのダメージが1増える。','捨て身の強襲｜試合中2回。専用札を1枚消費。ガードなら相手−4（背水中は−5）、回避なら相手−5。どちらも自分−2。カウンターなら自分−4。自分のライフ1では使えない。'],
+ ['読むな。見ろ。','見切り｜相手が前の攻め番と同じ技を出したら、ガード時に受けるライフ減少を1軽減。圧倒は対象外。','心眼｜試合中2回。カウンター札が残っている受け番に、相手の技を見てからガードかカウンターを選べる。'],
+ ['一撃を次の攻めにつなぐ軽騎士','先陣｜自分の最初の攻め番の牽制は2点。回避されると0点。','制圧｜初期0枚・上限1枚。制圧以外の攻め技で相手のライフを削ると1枚貯まる。使うまで持ち越せて、ガード・カウンター・回避にライフ−2。'],
+ ['守らせてから月の二択を迫る','月の構え｜自分の攻撃をガードされると1枚貯まる。上限1枚で持ち越し可。月の強襲は対象外。','月影｜構えを1枚消費。月の強襲はガードに3点、回避に4点、カウンターされると自分に3点。返しの月刃はカウンターに4点、ガードと回避には0点。'],
+ ['読み勝って技札を使い回す','イカサマ｜強襲系の技かカウンターで相手のライフを削れたら、使った強襲札かカウンター札が戻る。','大勝負｜試合中1回。強襲札があるときに使える。ガードに3点、回避に4点、カウンターされると自分に3点。'],
+];
+const lessons = [
+  {title:'ガードを割る', attack:'heavy', cpu:'guard',
+   moveHint:'両者ライフ8で開始。技は確定まで伏せる。牽制とフェイントは回避されると0点。強襲は回避に3点。ここではガードに強い「強襲」を選ぼう。',
+   result:'強襲がガードに通り、相手のライフが8から6へ。攻めと受けが交代するよ。'},
+  {title:'大技を返す', defense:'counter', cpu:'blood',
+   moveHint:'相手が大技を出すと読んだら「カウンター」。強襲とカウンターは通常それぞれ2枚。使いどころを選ぼう。',
+   result:'ノアは反撃で3点、自傷でさらに1点。ノアのライフは6→2、あなたのライフは8のまま。'},
+  {title:'切り札で決着', attack:'ignore', cpu:'counter',
+   moveHint:'相手のライフは2。「圧倒」なら、どの受け方でもライフを2削れる。',
+   result:'相手のライフが0。勝利！'}, 
+];
+let tutorial = false;
+let preview = 0, rival = 1, fighters = [0,1], usedTwo = false;
+const character = side => roster[fighters[side]];
+const nameOf = side => character(side)[0];
+let lastBanner = "";
+let you = null, turn = 1, attacker = 0, phase = 'lobby', cpuAttack = '', selection = '', event = '', history = [];
+const fresh = () => freshPlayers(fighters);
+const attacks = side => legalAttacks(fighters,players,side);
+const defenses = (side,stage) => legalDefenses(fighters,players,side,stage);
+const possible = (attack,defense,side) => damageFor(fighters,players,attack,defense,side);
+let players = fresh();
+function counterAfterReveal(attack) {
+  const [guardOwn,guardOther] = possible(attack,'guard',attacker);
+  const [counterOwn,counterOther] = possible(attack,'counter',attacker);
+  return counterOwn-counterOther > guardOwn-guardOther ? 'counter' : 'guard';
+}
+function weighted(list) {
+  return list[Math.floor(Math.random()*list.length)];
+}
+const cutSheets = ["./assets/v1-0-0/cutin-success.webp", "./assets/v1-0-0/cutin-strong.webp", "./assets/v1-0-0/cutin-hit.webp"];
+const cutRows = [0,5,1,2,3,4];
+let cutTimer = null;
+let openingTimer = null;
+const titleArt = Object.fromEntries(
+  ['match-start','first','second','attack','defense','victory','defeat'].map(name=>{
+    const image = new Image();
+    image.src = './assets/v1-0-0/title-'+name+'.webp';
+    return [name,image];
+  })
+);
+function showTitle(element, text, art, className = 'rr-scene-title-art', caption = false) {
+  if (art && element.firstElementChild?.dataset.art === art) return;
+  element.textContent = text;
+  if (!art || (titleArt[art].complete && !titleArt[art].naturalWidth)) return;
+  const image = titleArt[art].cloneNode();
+  image.dataset.art = art;
+  image.className = className;
+  image.alt = caption ? '' : text;
+  image.addEventListener('error',()=>image.replaceWith(caption ? '' : text),{once:true});
+  element.prepend(image);
+  if (!caption) element.lastChild.remove();
+}
+function clearOpening() {
+  clearTimeout(openingTimer);
+  openingTimer = null;
+  $('.rr-opening').hidden = true;
+  $('.rr-game').classList.remove('rr-opening-active','rr-tossing','rr-reveal-opening');
+}
+function showOpening() {
+  clearOpening();
+  const game = $('.rr-game');
+  const opening = $('.rr-opening');
+  const label = opening.querySelector('strong');
+  const coin = opening.querySelector('.rr-coin');
+  const first = attacker === you;
+  const result = first ? 'あなたが先攻です' : 'あなたが後攻です';
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  opening.style.setProperty('--rr-scene-art','url('+portrait[fighters[attacker]]+')');
+  coin.dataset.face = first ? 'front' : 'back';
+  coin.style.setProperty('--rr-coin-spin',first ? '1440deg' : '1620deg');
+  opening.hidden = false;
+  game.classList.add('rr-opening-active');
+  opening.dataset.stage = 'start';
+  $('.rr-enter-battle').hidden = true;
+  $('.rr-enter-battle').disabled = false;
+  $('.rr-enter-battle').textContent = '戦闘へ進む';
+  showTitle(label,'対戦開始','match-start');
+  function reveal() {
+    opening.dataset.stage = 'reveal';
+    showTitle(label,result,first ? 'first' : 'second','rr-scene-title-art',true);
+    game.classList.remove('rr-tossing');
+    game.classList.add('rr-reveal-opening');
+    openingTimer = null;
+    $('.rr-enter-battle').hidden = false;
+    $('.rr-enter-battle').focus({preventScroll:true});
+  }
+  openingTimer = setTimeout(()=>{
+    if (reduced) {
+      reveal();
+      return;
+    }
+    opening.dataset.stage = 'toss';
+    showTitle(label,'コイントス');
+    game.classList.add('rr-tossing');
+    openingTimer = setTimeout(reveal,1100);
+  },650);
+}
+$('.rr-enter-battle').onclick = () => {
+  if (online) { friendRequest('ready'); return; }
+  clearOpening();
+  ($('.rr-move:not(:disabled)') || $('.rr-navback')).focus({preventScroll:true});
+};
+function battleSideLabel(side) {
+  return side === you ? 'あなた' : online ? '相手' : 'CPU';
+}
+function passiveStatus(id, player, opponent, isAttacking) {
+  switch (id) {
+    case 0: return player.nick ? ['牽制ガードで発動', isAttacking] : ['使用済み', false];
+    case 1: return player.damage >= cap-3 ? ['発動中 · ライフ3以下', true] : ['待機 · ライフ3以下で発動', false];
+    case 2: return ['同じ技をガードで軽減', !isAttacking && Boolean(opponent.lastAttack)];
+    case 3: return player.attacks === 0 ? ['初回の攻めで有効', isAttacking] : ['初回の攻め終了', false];
+    case 4: return player.special ? ['構えあり', true] : ['攻めをガードされると獲得', false];
+    case 5: return ['強襲・反撃が通ると札回収', isAttacking ? player.heavy > 0 : player.counter > 0];
+  }
+}
+function showCutin(attack, defense, previousLife, passiveEffects) {
+  clearOpening();
+  const overlay = $('.rr-cutin');
+  const loss = players.map((p,side)=>previousLife[side]-(cap-p.damage));
+  const receiver = 1-attacker;
+  const damageDealer = loss[receiver] || !loss[attacker] ? attacker : receiver;
+  const other = 1-damageDealer;
+  const success = loss[other] > 0;
+  const strong = loss[other] >= 3;
+  const reflected = damageDealer === receiver && defense === 'counter';
+  overlay.querySelector('h3').textContent = success ? (strong ? '強成功' : '成功') + (reflected ? ' · カウンター成立' : ' · 攻撃が通った') : (defense === 'dodge' ? '回避成功' : 'ダメージなし');
+  overlay.querySelector('p').textContent = labels[attack]+' × '+labels[defense];
+  const rows = [damageDealer,other].map((side,i)=>{
+    const row = document.createElement('div');
+    row.className='rr-cut-row';
+    row.dataset.side=String(side);
+    if (strong && i===0) row.setAttribute('data-strong','');
+    const sheet = success ? (i===0 ? (strong ? 1 : 0) : 2) : 0;
+    row.style.setProperty('background-image','url('+cutSheets[sheet]+')');
+    row.style.setProperty('background-position','center '+(cutRows[fighters[side]]*20)+'%');
+    const label = document.createElement('b');
+    label.textContent = nameOf(side)+' · ライフ '+previousLife[side]+' → '+(cap-players[side].damage)+(loss[side] ? '（−'+loss[side]+'）' : '（変化なし）');
+    row.append(label);
+    return row;
+  });
+  overlay.querySelector('div').replaceChildren(...rows);
+  const passiveResults = overlay.querySelector('.rr-passive-results');
+  passiveResults.replaceChildren(...passiveEffects.map(([side,effect])=>{
+    const item = document.createElement('li');
+    item.textContent = '✦ '+battleSideLabel(side)+' · '+nameOf(side)+'「'+passives[fighters[side]]+'」発動 · '+effect;
+    return item;
+  }));
+  passiveResults.hidden = passiveEffects.length === 0;
+  overlay.classList.remove('rr-exit');
+  overlay.hidden=false;
+  $('.rr-game').classList.add('rr-judgment');
+  render();
+  overlay.scrollIntoView({block:'nearest'});
+  $('.rr-commit').focus({preventScroll:true});
+}
+function dismissCutin(next) {
+  const overlay = $('.rr-cutin');
+  if (overlay.hidden) { next(); return; }
+  overlay.classList.add('rr-exit');
+  $('.rr-commit').disabled=true;
+  cutTimer=setTimeout(()=>{
+    cutTimer=null;
+    overlay.hidden=true;
+    $('.rr-game').classList.remove('rr-judgment');
+    next();
+    const target = phase === 'lobby' ? $('[data-pick="'+preview+'"]') : $('.rr-move:not(:disabled)') || $('.rr-commit');
+    target.focus();
+  },240);
+}
+// Only aggregate game events; never send URLs, names, IPs or visitor IDs.
+const metrics = (() => {
+  const opt = document.querySelector('#duel-metrics-opt');
+  const blocked = navigator.doNotTrack === '1' || navigator.globalPrivacyControl === true;
+  const qa = new URLSearchParams(location.search).get('analytics') === 'off';
+  const endpoint = new URLSearchParams(location.search).get('analytics') === 'test' ? '/duel/metrics/test-event' : '/duel/metrics/event';
+  let enabled = !blocked && !qa, viewed = false;
+  try { if (localStorage.getItem('duel-metrics-disabled') === '1') enabled = false; } catch (_) {}
+  opt.checked = enabled;
+  if (blocked || qa) opt.disabled = true;
+  let source = 'direct';
+  try {
+    if (document.referrer) {
+      const host = new URL(document.referrer).hostname;
+      source = host === location.hostname ? 'internal' : /(^|\.)(google\.[a-z.]+|bing.com|search.yahoo.co.jp|duckduckgo.com)$/.test(host) ? 'search' : /(^|\.)(t.co|x.com|twitter.com|facebook.com|instagram.com|threads.net|youtube.com)$/.test(host) ? 'social' : 'other';
+    }
+  } catch (_) {}
+  function send(event, detail = {}) {
+    if (!enabled) return false;
+    try {
+    const payload = {id:crypto.randomUUID(),version:'v20-a1',event,mode:'none',hero:-1,cpu:-1,result:'none',turn:0,device:innerWidth<600?'mobile':innerWidth<1000?'tablet':'desktop',source,...detail};
+    fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},credentials:'omit',referrerPolicy:'no-referrer',keepalive:true,body:JSON.stringify(payload)}).catch(()=>{});
+    return true;
+    } catch (_) { return false; }
+  }
+  function view(){if(enabled&&!viewed){viewed=true;send('view');}}
+  opt.addEventListener('change',()=>{enabled=opt.checked&&!blocked&&!qa;try{localStorage.setItem('duel-metrics-disabled',enabled?'0':'1');}catch(_){} view();});
+  view();
+  return {send};
+})();
+let metricsMatch = null;
+function metricStart(){
+  metricsMatch={mode:tutorial?'tutorial':'cpu',hero:fighters[0],cpu:fighters[1],turn:1,result:'none'};
+  if(!metrics.send('start',metricsMatch)) metricsMatch=null;
+}
+function metricFinish(){
+  if(!metricsMatch)return;
+  const diff=players[1].damage-players[0].damage;
+  metrics.send('complete',{...metricsMatch,turn,result:diff>0?'win':diff<0?'loss':'draw'});
+  metricsMatch=null;
+}
+function metricQuit(){if(metricsMatch){metrics.send('quit',{...metricsMatch,turn});metricsMatch=null;}}
+
+function lobby() {
+  metricQuit();
+  clearOpening();
+  $('.rr-debug').open = false;
+  clearTimeout(cutTimer);
+  cutTimer=null;
+  $('.rr-cutin').hidden=true;
+  $('.rr-game').classList.remove('rr-judgment');
+  tutorial=false; you=null; fighters=[preview,rival]; players=fresh(); history=[]; event=''; phase='lobby'; render();
+}
+function start(side, guided = false) {
+  $('.rr-debug').open = false;
+  tutorial = guided;
+  fighters = guided ? [0,1] : [side,rival];
+  you = 0; turn = 1; attacker = guided ? 0 : Math.floor(Math.random()*2); players = fresh(); history = []; event = '';
+  metricStart();
+  ready();
+  if (!guided) showOpening();
+}
+function ready() {
+  selection = ''; cpuAttack = ''; event = ''; usedTwo = false;
+  if (attacker === you) phase = 'attack';
+  else {
+    phase = 'defend';
+    cpuAttack = tutorial ? lessons[turn-1].cpu : weighted(attacks(attacker));
+  }
+  render();
+}
+function settle(attack, defense) {
+  const previousLife=players.map(p=>cap-p.damage);
+  const receiver = 1-attacker;
+  const p = players[attacker];
+  const {own,other,heavyReturned,counterReturned,chaseCharge,moonCharge,passiveEffects} =
+    resolve(fighters,players,attacker,attack,defense);
+  const pieces = [nameOf(attacker) + '「' + labels[attack] + '」 vs ' + nameOf(receiver) + '「' + labels[defense] + '」'];
+  if (usedTwo) pieces.push('心眼で技を見てから受けを選択');
+  if (attack === 'allIn') pieces.push('大勝負の札を消費');
+  if (attack === 'moon' || attack === 'lunar') pieces.push('月の構えを消費');
+  if (chaseCharge) pieces.push('制圧：札を1枚獲得');
+  if (moonCharge) pieces.push('月の構え：札を1枚獲得');
+  const selfCost = attack === 'blood' ? (defense === 'counter' ? 1 : 2) : 0;
+  if (selfCost) pieces.push('自傷で'+nameOf(attacker)+'のライフが'+selfCost+'減少');
+  if (heavyReturned) pieces.push('イカサマ：強襲が戻った（強襲残り'+p.heavy+'）');
+  if (counterReturned) pieces.push('イカサマ：カウンターが戻った（カウンター残り'+players[receiver].counter+'）');
+  if (own > selfCost) pieces.push(nameOf(attacker) + 'のライフ−' + (own - selfCost));
+  if (other) pieces.push(nameOf(receiver) + 'のライフ−' + other);
+  if (!own && !other) pieces.push('ライフ変化なし');
+  event = pieces.join(' ／ ');
+  history.push('第' + turn + 'ターン　' + event);
+  phase = players.some(item => item.damage === cap) || turn === limit ? 'done' : 'result';
+  if (tutorial && turn === lessons.length) phase = 'done';
+  matchRewardWins = 0;
+  if (phase === 'done' && !tutorial && players[1-you].damage > players[you].damage) {
+    matchRewardWins = recordRewardWin(fighters[1-you]);
+  }
+  if (phase === 'done') metricFinish();
+  selection = '';
+  showCutin(attack,defense,previousLife,passiveEffects);
+}
+function movePreviewRow(label, attack, defense) {
+  const row = document.createElement('li');
+  function add(text, className) {
+    const span = document.createElement('span');
+    span.className = className;
+    span.textContent = text;
+    row.append(span);
+  }
+  const snapshot = players.map(player=>({...player}));
+  const {own,other,passiveEffects,chaseCharge} = resolve(fighters,snapshot,attacker,attack,defense);
+  const damage = attacker === you ? [own,other] : [other,own];
+  add(label+' →','rr-preview-move');
+  if (damage[1]) add('相手のライフ-'+damage[1],'rr-preview-opponent');
+  if (damage[0]) add('自分のライフ-'+damage[0],'rr-preview-self');
+  if (!own && !other) add('変動なし','rr-preview-neutral');
+  for (const [side,effect] of passiveEffects) {
+    add((side===you?'自分':'相手')+'の'+passives[fighters[side]]+'：'+effect,'rr-preview-passive');
+  }
+  if (chaseCharge) add((attacker===you?'自分':'相手')+'の制圧札＋1','rr-preview-passive');
+  return row;
+}
+function showMovePreview() {
+  root.querySelectorAll('.rr-move').forEach(button=>
+    button.setAttribute('aria-pressed',String(button.dataset.move===selection)));
+  const list = $('.rr-move-preview');
+  list.hidden = !selection || !['attack','defend','reveal'].includes(phase);
+  if (list.hidden) { list.replaceChildren(); return; }
+  if (phase==='attack') {
+    list.replaceChildren(...defenses(1-you).map(defense=>movePreviewRow(labels[defense],selection,defense)));
+  } else if (phase==='reveal') {
+    list.replaceChildren(movePreviewRow(labels[cpuAttack],cpuAttack,selection));
+  } else if (selection==='two') {
+    list.replaceChildren(...attacks(attacker).flatMap(attack=>defenses(you,'reveal').map(defense=>
+      movePreviewRow(labels[attack]+' ／ '+labels[defense],attack,defense))));
+  } else {
+    list.replaceChildren(...attacks(attacker).map(attack=>movePreviewRow(labels[attack],attack,selection)));
+  }
+}
+function option(key) {
+  const button = document.createElement('button');
+  button.type = 'button'; button.className = 'rr-move cursor-interaction';
+  button.dataset.move = key;
+  const name = document.createElement('b');
+  name.textContent = labels[key];
+  button.append(name);
+  const costs = {
+    heavy: ['強襲'], counter: ['カウンター'], ignore: ['圧倒'],
+    blood: ['捨て身'], chase: ['制圧'], two: ['心眼'],
+    allIn: ['強襲','大勝負'], lunar: ['月の構え'], moon: ['月の構え'],
+  }[key];
+  if (costs) {
+    const cost = document.createElement('span');
+    cost.className = 'rr-cost';
+    cost.textContent = '消費 '+costs.map(label=>label+'×1').join('＋');
+    button.append(cost);
+  }
+  if (tutorial) {
+    const lesson = lessons[turn-1];
+    const wanted = phase === 'attack' ? lesson.attack : lesson.defense;
+    button.disabled = key !== wanted;
+  }
+  button.onclick = () => {
+    if (cutTimer !== null) return;
+    selection = key;
+    showMovePreview();
+    $('.rr-commit').disabled = false;
+    $('.rr-commit').textContent = labels[key] + 'で確定';
+  };
+  return button;
+}
+function handRow(label, count, max, skill = false, locked = false, rechargeable = false) {
+  const row = document.createElement('div');
+  row.className = 'rr-handrow'+(skill?' rr-skill':'');
+  const text = document.createElement('span');
+  text.textContent = label;
+  const cards = document.createElement('span');
+  cards.className = 'rr-cards';
+  cards.setAttribute('role','img');
+  cards.setAttribute('aria-label',label+' 残り'+count+'枚／'+max+'枚'+(locked?'・条件未達':''));
+  for (let i=0;i<max;i++) {
+    const card = document.createElement('span');
+    card.className = 'rr-token'+(i>=count?(rechargeable?' rr-locked':' rr-spent'):locked?' rr-locked':'');
+    card.setAttribute('aria-hidden','true');
+    card.textContent = i>=count?(rechargeable?'◇':'×'):locked?'◇':skill?'◆':'▪';
+    cards.append(card);
+  }
+  row.append(text,cards);
+  return row;
+}
+function render() {
+  root.querySelectorAll('[data-pick]').forEach(button=>{
+    button.setAttribute('aria-pressed',String(Number(button.dataset.pick)===(phase === 'lobby' ? preview : fighters[0])));
+    button.disabled = phase !== 'lobby' && phase !== 'done';
+  });
+  $('.rr-tabs').hidden = phase !== 'lobby';
+  debugEntry.hidden = phase !== 'lobby' || intro;
+  debugPanel.hidden = debugEntry.hidden || !debugPanel.open;
+  debugEntry.setAttribute('aria-expanded', String(!debugPanel.hidden));
+  $('.rr-cpu').hidden = phase !== 'lobby';
+  const details = $('.rr-guide');
+  details.hidden = phase !== 'lobby';
+  if (!details.hidden) {
+    const [goal, passive, active] = guide[preview];
+    details.querySelector('strong').textContent = goal;
+    const skills = details.querySelectorAll('.rr-kit span');
+    skills[0].textContent = labels[roster[preview][2]]+(preview===4?'（構えを消費）':preview===3?'（再チャージ式）':' ×'+roster[preview][3]);
+    skills[1].textContent = passives[preview];
+    const paragraphs = details.querySelectorAll('p');
+    paragraphs[0].textContent = active.split('｜')[1];
+    paragraphs[1].textContent = passive.split('｜')[1];
+  }
+  const flow = $('.rr-flow');
+  flow.hidden = phase === 'lobby' || phase === 'done';
+  const banner = flow.hidden ? '' : turn + ':' + attacker + ':' + you;
+  if (banner !== lastBanner) {
+    lastBanner = banner;
+    flow.classList.remove('rr-enter');
+    if (banner) {
+      flow.querySelector('strong').textContent = attacker === you ? 'あなたの攻撃' : 'あなたの守備';
+      flow.querySelector('small').textContent = (tutorial ? '練習 '+turn+' / '+lessons.length : '第'+turn+' / '+limit+'ターン')+' · '+nameOf(attacker)+' が攻める';
+      void flow.offsetWidth;
+      flow.classList.add('rr-enter');
+    }
+  }
+  const attacking = attacker === you;
+  flow.dataset.role = flow.hidden ? '' : attacking ? 'attack' : 'defense';
+  showTitle($('.rr-versus'),flow.hidden ? 'VS' : attacking ? '攻撃' : '守備',
+    flow.hidden ? null : flow.dataset.role,'rr-role-art');
+  players.forEach((p, side)=>{
+    $('[data-role="'+side+'"]').textContent = you === null ? titles[fighters[side]]
+      : battleSideLabel(side) + ' · ' + (attacker === side ? '攻め' : '受け');
+    $('[data-cloth="'+side+'"]').textContent = 'ライフ '+(cap-p.damage)+' / '+cap;
+    $('[data-pips="'+side+'"]').replaceChildren(...Array.from({length:cap},(_,index)=>{
+      const pip = document.createElement('i');
+      if(index>=cap-p.damage) pip.className = 'rr-broken';
+      return pip;
+    }));
+    const hand = $('[data-stock="'+side+'"]');
+    hand.setAttribute('aria-label',nameOf(side)+'の手札');
+    const passive = document.createElement('span');
+    passive.className = 'rr-passive';
+    passive.textContent = '◇ '+passives[fighters[side]];
+    if (you !== null) {
+      const [status, active] = passiveStatus(fighters[side],p,players[1-side],attacker===side);
+      passive.textContent = (active ? '✦ ' : '◇ ')+passives[fighters[side]]+' · '+status;
+      passive.toggleAttribute('data-active',active);
+    }
+    const isIris = fighters[side] === 3;
+    hand.replaceChildren(passive,handRow(labels[character(side)[2]],p.special,character(side)[3],true,false,isIris || fighters[side]===4),
+      handRow('強襲',p.heavy,2),handRow('カウンター',p.counter,2));
+    if (isIris || fighters[side] === 4) {
+      const note = document.createElement('small');
+      note.className = 'rr-lock';
+      note.textContent = isIris ? (p.special ? '制圧：使用可能' : '制圧以外の攻め技で相手のライフを削ると貯まる')
+        : p.special ? '月の技が使える' : '構えなし';
+      hand.append(note);
+    }
+    const fighter = $('.rr-fighter.rr-'+(side===0?'a':'b'));
+    fighter.querySelector('.rr-name').textContent = nameOf(side);
+    const debug = phase === 'lobby' && $('.rr-debug').open;
+    const id = debug ? Number($('[data-debug-fighter="'+side+'"]').value) : fighters[side];
+    const shownDamage = debug ? cap-Number($('[data-debug-damage="'+side+'"]').value) : p.damage;
+    const critical = shownDamage >= 6;
+    const damageStage = shownDamage >= 4 ? 4 : shownDamage >= 2 ? 2 : 0;
+    const stagePortrait = !critical && damageStage ? damageStagePortraits[damageStage][id] : null;
+    if (debug) {
+      fighter.querySelector('.rr-name').textContent = roster[id][0];
+      $('[data-cloth="'+side+'"]').textContent = 'ライフ '+(cap-shownDamage)+' / '+cap;
+      $('[data-pips="'+side+'"]').replaceChildren(...Array.from({length:cap},(_,index)=>{
+        const pip = document.createElement('i');
+        if (index >= cap-shownDamage) pip.className = 'rr-broken';
+        return pip;
+      }));
+    }
+    fighter.classList.toggle('rr-critical',critical);
+    fighter.style.setProperty('--rr-portrait','url('+(stagePortrait ?? (critical ? damagedPortrait[id] : portrait[id]))+')');
+    const [zoom, x, y] = portraitCrops[Number(critical)][id];
+    fighter.style.setProperty('--rr-portrait-size',stagePortrait ? '100% 100%' : zoom+'% auto');
+    fighter.style.setProperty('--rr-crop',x+'% '+y+'%');
+    fighter.classList.toggle('rr-active',!flow.hidden && attacker === side);
+  });
+  const headings = {waiting:'相手の行動待ち',lobby:intro ? roster[preview][0] : '剣士を選ぶ',attack:'技を選ぶ',defend:'どう受ける？',reveal:'心眼 · 受け技を選ぶ',result:'このターンの結果'};
+  const diff = you === null ? 0 : players[1-you].damage-players[you].damage;
+  const rewardNotice = $('.rr-reward-notice');
+  rewardNotice.hidden = Boolean(online) || phase !== 'done' || tutorial || you === null;
+  rewardNotice.textContent = '';
+  if (!rewardNotice.hidden) {
+    const id = fighters[1-you];
+    const name = roster[id][0];
+    const wins = matchRewardWins || rewardWinCount(id);
+    const nextGoal = rewardMilestones.find(goal=>goal>wins);
+    const progress = nextGoal ? '次のご褒美まであと'+(nextGoal-wins)+'勝' : 'ご褒美はすべて解放済み';
+    const unlocked = rewardMilestones.includes(matchRewardWins);
+    rewardNotice.textContent = (unlocked ? name+'のご褒美を解放！ ' : '')+
+      name+'に'+wins+'勝 · '+progress;
+  }
+  const heading = phase === 'done' ? (tutorial ? 'チュートリアル完了' : diff===0?'引き分け':diff>0?'あなたの勝利':'あなたの敗北') : headings[phase];
+  const resultArt = phase === 'done' && !tutorial && diff !== 0 ? (diff > 0 ? 'victory' : 'defeat') : null;
+  showTitle($('#rp-title'),heading,resultArt);
+  $('#rp-context').textContent = {
+    lobby:intro ? '' : titles[preview]+' ／ '+roster[preview][1],
+    attack:'攻め技を選ぶ。確定まで相手には見えない。',
+    defend:'相手の技を読んで受ける。',
+    reveal:'相手の技は「'+(labels[cpuAttack]??'')+'」',
+    waiting:'相手が技を確定すると進みます。',
+    result:'次のターンは攻めと受けが交代',
+    done:tutorial ? '攻め・受け・切り札を練習した' : turn===limit && !players.some(p=>p.damage===cap) ? '10ターン終了 ・ 残りライフが多い側の勝ち' : 'ライフが0に達した',
+  }[phase];
+  const lessonPanel = $('.rr-lesson');
+  lessonPanel.hidden = !tutorial;
+  if (tutorial) {
+    const lesson = lessons[turn-1];
+    lessonPanel.querySelector('strong').textContent = turn+' / '+lessons.length+'　'+lesson.title;
+    lessonPanel.querySelector('p').textContent = phase === 'result' || phase === 'done' ? lesson.result : lesson.moveHint;
+  }
+  const tutorialButton = $('.rr-tutorial');
+  tutorialButton.hidden = tutorial ? phase === 'done' : phase !== 'lobby';
+  tutorialButton.textContent = tutorial ? '練習をやめる' : '遊び方を試す';
+  $('#rp-event').hidden = !event;
+  $('#rp-event').textContent = event;
+  let options = [];
+  if (phase === 'attack') options = attacks(you);
+  if (phase === 'defend' || phase === 'reveal') options = defenses(you,phase);
+  $('.rr-options').replaceChildren(...options.map(option));
+  showMovePreview();
+  const commit = $('.rr-commit');
+  commit.hidden = phase === 'waiting';
+  commit.disabled = options.length>0 && !selection || Boolean(online?.acknowledged[online.seat]);
+  commit.textContent = phase === 'lobby' ? roster[preview][0]+'で対戦開始' : phase === 'result' ? '次のターンへ' : phase === 'done' ? (online ? '再戦する' : '剣士選択へ') : '確定';
+  $('.rr-log').hidden = history.length===0;
+  $('.rr-log ol').replaceChildren(...history.slice().reverse().map(entry=>{
+    const li=document.createElement('li'); li.textContent=entry; return li;
+  }));
+}
+roster.forEach(([name], id) => {
+  const button = document.createElement('button');
+  button.type='button';
+  button.className='cursor-interaction';
+  button.dataset.pick=String(id);
+  button.textContent=name;
+  button.onclick=()=>{
+    if (phase !== 'lobby') return;
+    preview=id;
+    fighters=[preview,rival];
+    players=fresh();
+    render();
+  };
+  $('.rr-tabs').append(button);
+  const choice = document.createElement('option');
+  choice.value=String(id);
+  choice.textContent=name;
+  $('.rr-cpu select').append(choice);
+});
+$('.rr-cpu select').value=String(rival);
+$('.rr-cpu select').onchange=event=>{
+  rival=Number(event.target.value);
+  fighters=[preview,rival];
+  players=fresh();
+  render();
+};
+$('.rr-tutorial').onclick=()=>{
+  if (tutorial) {
+    lobby();
+    $('.rr-tutorial').focus();
+  } else if (phase === 'lobby') {
+    start(0,true);
+    $('.rr-move:not(:disabled)').focus();
+  }
+};
+$('.rr-commit').onclick=()=>{
+  if (cutTimer !== null) return;
+  if (phase === 'lobby') start(preview);
+  else if (phase === 'attack' && selection) {
+    const available = defenses(1-you,'defend');
+    const defense = tutorial ? lessons[turn-1].cpu : weighted(available);
+    if (defense === 'two') {
+      players[1-you].special--;
+      usedTwo=true;
+      settle(selection,counterAfterReveal(selection));
+    } else settle(selection,defense);
+  } else if (phase === 'defend' && selection === 'two') {
+    players[you].special--;
+    usedTwo=true;
+    selection='';
+    phase='reveal';
+    render();
+  } else if ((phase === 'defend' || phase === 'reveal') && selection) settle(cpuAttack,selection);
+  else if (phase === 'result') { dismissCutin(()=>{turn++; attacker=1-attacker; ready();}); return; }
+  else if (phase === 'done') { dismissCutin(lobby); return; }
+  const target = phase === 'lobby' ? $('[data-pick="'+preview+'"]') : $('.rr-move:not(:disabled)') || $('.rr-commit');
+  target.focus();
+};
+const debugPanel = $('.rr-debug');
+const debugEntry = $('.rr-debug-entry');
+debugEntry.onclick = () => {
+  if (debugEntry.hidden) return;
+  debugPanel.open = !debugPanel.open;
+  refreshDebug();
+  if (debugPanel.open) debugPanel.querySelector('summary').focus();
+};
+const debugInputs = [0,1].map(side=>$('[data-debug-damage="'+side+'"]'));
+const debugFighters = [0,1].map(side=>$('[data-debug-fighter="'+side+'"]'));
+function refreshDebug() {
+  debugInputs.forEach(input=>{input.nextElementSibling.textContent=input.value;});
+  render();
+}
+debugFighters.forEach((select,side)=>{
+  roster.forEach(([name],id)=>{
+    const option=document.createElement('option');
+    option.value=String(id);
+    option.textContent=name;
+    select.append(option);
+  });
+  select.value=String(fighters[side]);
+  select.onchange=refreshDebug;
+});
+debugInputs.forEach(input=>{input.oninput=refreshDebug;});
+debugPanel.ontoggle=()=>{
+  if (debugPanel.open) {
+    debugFighters.forEach((select,side)=>{select.value=String(fighters[side]);});
+    debugInputs.forEach((input,side)=>{input.value=String(cap-players[side].damage);});
+  }
+  refreshDebug();
+};
+[3,2].forEach(value=>{
+  $('[data-debug-value="'+value+'"]').onclick=()=>{
+    debugInputs[1].value=String(value);
+    refreshDebug();
+  };
+});
+$('[data-debug-reset]').onclick=()=>{
+  debugInputs.forEach(input=>{input.value=String(cap);});
+  refreshDebug();
+};
+const winPaths = [
+  "牽制で崩しを狙い、回避には強襲、残りライフ2には圧倒。",
+  "捨て身でガードと回避に圧をかけ、牽制やフェイントでカウンター札を減らす。",
+  "牽制には回避、大技には心眼。返せる技だけを返して札を温存。",
+  "先陣で制圧へ。牽制を回避されそうなら強襲からつなぐ。",
+  "ガードを誘って構えを貯め、回避には月の強襲、カウンターには返しの月刃。",
+  "ガードや回避には強襲、カウンターにはフェイント。通した強襲と反撃の札を回収。"
+];
+let intro = false;
+const home = $('nav.rr-home');
+const game = $('.rr-game');
+const album = $('.rr-album');
+const albumButton = $('[data-home="album"]');
+albumButton.onclick = () => {
+  home.hidden = true;
+  album.hidden = false;
+
+  const fighterList = album.querySelector('.rr-album-fighters');
+  const cards = album.querySelector('.rr-album-cards');
+  const grid = cards.querySelector('.rr-album-grid');
+  const dialog = album.querySelector('.rr-album-dialog');
+  const image = dialog.querySelector('img');
+  const wins = roster.map((_,id)=>rewardWinCount(id));
+  const unlocked = wins.reduce((sum,count)=>sum+rewardMilestones.filter(goal=>count>=goal).length,0);
+  album.querySelector('.rr-album-count').textContent =
+    '解放 '+unlocked+' / '+(roster.length*rewardMilestones.length);
+  dialog.onclose = () => image.removeAttribute('src');
+
+  function selectFighter(id) {
+    const [name] = roster[id];
+    fighterList.querySelectorAll('button').forEach((button,index)=>{
+      button.setAttribute('aria-pressed',String(index === id));
+    });
+    cards.hidden = false;
+    cards.querySelector('h3').textContent = name+' · '+wins[id]+'勝';
+    grid.setAttribute('aria-label',name+'のご褒美枠');
+    grid.replaceChildren(...rewardMilestones.map(goal=>{
+      const button = document.createElement('button');
+      const thumb = document.createElement('span');
+      const status = document.createElement('small');
+      const label = goal === 1 ? '初勝利' : goal+'勝';
+      const achieved = wins[id] >= goal;
+      const reward = achieved ? rewardArt[goal][id] : null;
+      thumb.className = 'rr-album-thumb';
+      thumb.setAttribute('aria-hidden','true');
+      button.type = 'button';
+      button.disabled = !reward;
+      if (reward) {
+        const thumbnail = document.createElement('img');
+        thumbnail.src = goal === 10 ? relaxThumb[id] : reward;
+        thumbnail.alt = '';
+        thumb.append(thumbnail);
+        button.onclick = () => {
+          image.src = reward;
+          image.alt = name+'の'+label+'イラスト';
+          dialog.querySelector('figcaption').textContent = name+' · '+label;
+          dialog.showModal();
+        };
+      } else {
+        thumb.textContent = achieved ? '✓' : '🔒';
+      }
+      status.textContent = !achieved ? wins[id]+' / '+goal+'勝' : reward ? '拡大する' : '達成 · 画像準備中';
+      button.append(thumb,label,status);
+      return button;
+    }));
+  }
+
+  fighterList.replaceChildren(...roster.map(([name],id)=>{
+    const button = document.createElement('button');
+    const count = document.createElement('small');
+    button.type = 'button';
+    button.textContent = name;
+    count.textContent = wins[id]+'勝';
+    button.append(count);
+    button.onclick = () => selectFighter(id);
+    return button;
+  }));
+  selectFighter(Math.max(0,wins.findIndex(count=>count>0)));
+  album.querySelector('.rr-album-back').focus();
+};
+album.querySelector('.rr-album-back').onclick = () => {
+  album.hidden = true;
+  home.hidden = false;
+  albumButton.focus();
+};
+const guidePanel = $('.rr-guide');
+const pathLine = document.createElement('p');
+guidePanel.append(pathLine);
+const introSheet = $('.rr-intro-sheet');
+const introDialog = $('.rr-intro-dialog');
+const introGuide = $('.rr-intro-guide');
+const tactics = [
+  "牽制をガードさせて崩し、回避を読んだら強襲で3点。圧倒は受け方を問わず2点。相手の残りライフ2を仕留められる。",
+  "捨て身はガードに4点、回避に5点。カウンターを誘い、牽制やフェイントで先に札を使わせる。ライフ3なら背水でガードにも5点。自傷2点を払ってライフ1を残せる。",
+  "牽制を読むなら回避。技を見てから受けを決めたいなら心眼。強襲ならカウンターで返し、返せない技ならガードしてカウンター札を温存する。読むな。見ろ。",
+  "先陣の牽制を通して制圧につなぐ。牽制を回避されると制圧は貯まらない。回避を読んだら強襲で3点を取って、制圧につなぎ直す。",
+  "ガードを誘って構えを貯める。ガードや回避には月の強襲、カウンターには返しの月刃。回避が多ければ通常強襲でガードを意識させる。",
+  "ガードや回避を読んで強襲を通し、札を回収。大勝負なら回避に4点。カウンターに寄ったらフェイント、受けでは相手の強襲を返してカウンター札も回収する。"
+];
+introSheet.onclick = () => {
+  const source = introSheet.querySelector('img');
+  const image = introDialog.querySelector('img');
+  image.src = source.src;
+  image.alt = source.alt;
+  introDialog.showModal();
+};
+function showWinPath() {
+  pathLine.textContent = '勝ち筋｜'+winPaths[preview];
+  if (!intro) return;
+  const image = introSheet.querySelector('img');
+  image.src = introSheets[preview];
+  image.alt = roster[preview][0]+'の剣士紹介シート';
+  introSheet.setAttribute('aria-label',image.alt+'を拡大');
+  introGuide.querySelector('p').textContent = tactics[preview];
+  const [, passive, active] = guide[preview];
+  const list = introGuide.querySelector('dl');
+  list.replaceChildren();
+  for (const skill of [active,passive]) {
+    const [name, effect] = skill.split('｜');
+    const dt = document.createElement('dt'), dd = document.createElement('dd');
+    dt.textContent = name;
+    dd.textContent = effect;
+    list.append(dt,dd);
+  }
+  $('.rr-commit').textContent = 'この剣士でCPU戦';
+}
+$('.rr-tabs').addEventListener('click', showWinPath);
+const startMatch = $('.rr-commit').onclick;
+$('.rr-commit').onclick = event => {
+  if (!$('.rr-opening').hidden || cutTimer !== null) return;
+  if (online) {
+    if (phase === 'result') friendRequest('next');
+    else if (phase === 'done') friendRequest('rematch');
+    else if (selection) friendRequest('move',{move:selection});
+    return;
+  }
+  if (intro && phase === 'lobby') {
+    intro = false;
+    game.removeAttribute('data-intro');
+  }
+  startMatch(event);
+};
+['cpu','tutorial','roster'].forEach(mode=>{
+  $('[data-home="'+mode+'"]').onclick = ()=>{
+    home.hidden = true;
+    game.hidden = false;
+    intro = mode === 'roster';
+    if (intro) game.setAttribute('data-intro','');
+    else game.removeAttribute('data-intro');
+    lobby();
+    showWinPath();
+    if (mode === 'tutorial') $('.rr-tutorial').onclick();
+    else $('[data-pick="'+preview+'"]').focus();
+  };
+});
+$('.rr-navback').onclick = ()=>{
+  leaveFriend();
+  lobby();
+  game.hidden = true;
+  home.hidden = false;
+  $('[data-home="cpu"]').focus();
+};
+const friend = $('.rr-friend');
+const friendInvite = friend.querySelector('.rr-friend-invite');
+const inviteField = friendInvite.querySelector('input');
+const friendSelect = friend.querySelector('.rr-friend-select');
+const friendStart = friend.querySelector('.rr-friend-pick');
+const friendCreate = friend.querySelector('.rr-friend-create');
+const countdown = $('.rr-countdown');
+const countdownText = countdown.querySelector('span');
+const countdownBar = countdown.querySelector('progress');
+const friendPick = friend.querySelector('select');
+const friendStatus = friend.querySelector('.rr-friend-status');
+const gameStatus = $('.rr-online-status');
+let online = null;
+let friendBusy = false;
+let friendPolling = false;
+let friendEpoch = 0;
+let friendPoll = null;
+let countdownEnd = 0;
+let countdownTick = null;
+
+function inviteUrl(code) {
+  const url = new URL(location.href);
+  url.hash = 'invite='+code;
+  return url;
+}
+
+function setCountdown(state) {
+  countdownEnd = state.deadline ? performance.now() + state.deadline - state.serverNow : 0;
+  clearInterval(countdownTick);
+  updateCountdown();
+  if (countdownEnd) countdownTick = setInterval(updateCountdown,100);
+}
+
+function updateCountdown() {
+  const opening = $('.rr-opening');
+  countdown.hidden = !online || !countdownEnd || online.phase === 'opening' && opening.dataset.stage !== 'reveal';
+  if (countdown.hidden) return;
+  const choosing = ['attack','defend','reveal'].includes(online.phase);
+  const actingSeat = online.phase === 'attack' ? online.attacker : 1-online.attacker;
+  const waitingForOpponent = choosing ? actingSeat !== online.seat : online.acknowledged[online.seat];
+  const anchor = choosing && waitingForOpponent ? $('#rp-title') : gameStatus;
+  if (countdown.previousElementSibling !== anchor) anchor.after(countdown);
+  countdown.dataset.owner = waitingForOpponent ? 'opponent' : 'self';
+  countdownBar.setAttribute('aria-label',waitingForOpponent ? '相手の残り時間' : '自分の残り時間');
+  const duration = choosing ? 20000 : 5000;
+  const left = Math.max(0,Math.min(duration,countdownEnd-performance.now()));
+  const seconds = Math.ceil(left/1000);
+  countdownText.textContent = seconds ? '残り '+seconds+' 秒' : '同期中…';
+  countdownBar.max = duration;
+  countdownBar.value = left;
+}
+
+roster.forEach(([name],id)=>{
+  const option = document.createElement('option');
+  option.value = String(id);
+  option.textContent = name;
+  friendPick.append(option);
+});
+
+function applyOnline(state) {
+  const prior = online;
+  if (prior && state.revision <= prior.revision) return;
+  online = state;
+  if (prior?.code !== state.code) window.history.replaceState(null,'',inviteUrl(state.code));
+  setCountdown(state);
+  if (state.phase === 'lobby') {
+    clearOpening();
+    friend.hidden = false;
+    game.hidden = true;
+    const paired = state.occupied.every(Boolean);
+    const picked = state.fighters[state.seat] !== null;
+    friendCreate.hidden = true;
+    friendInvite.hidden = paired;
+    inviteField.value = inviteUrl(state.code).href;
+    friendSelect.hidden = !paired;
+    friendPick.disabled = picked;
+    friendStart.disabled = picked;
+    friendStatus.textContent = !paired ? 'リンクを相手に送ってください。入室すると剣士選択に進みます。'
+      : picked ? '選択済み。相手が開始すると対戦が始まります。'
+      : '剣士を選んで対戦開始。';
+    $('.rr-cutin').hidden = true;
+    game.classList.remove('rr-judgment');
+    return;
+  }
+  friend.hidden = true;
+  game.hidden = false;
+  gameStatus.hidden = false;
+  const order = [state.seat,1-state.seat];
+  fighters = order.map(seat=>state.fighters[seat]);
+  players = order.map(seat=>state.players[seat]);
+  you = 0;
+  turn = state.turn;
+  attacker = state.attacker === state.seat ? 0 : 1;
+  if (state.phase === 'opening') {
+    phase = 'waiting';
+    if (prior?.phase !== 'opening' || prior.match !== state.match) showOpening();
+    const ready = state.acknowledged[state.seat];
+    gameStatus.textContent = ready ? '相手の行動待ち' : '友達と対戦';
+    const button = $('.rr-enter-battle');
+    button.disabled = ready;
+    button.textContent = ready ? '準備完了' : '戦闘へ進む';
+    return;
+  }
+  if (prior?.phase === 'opening') clearOpening();
+  const myMove = state.phase === 'attack' ? attacker === 0 : attacker === 1;
+  phase = ['attack','defend','reveal'].includes(state.phase) && !myMove ? 'waiting' : state.phase;
+  cpuAttack = state.revealed ?? '';
+  selection = '';
+  gameStatus.textContent = '友達と対戦';
+  if (state.acknowledged[state.seat] && ['done','result'].includes(phase)) {
+    gameStatus.textContent = '相手の行動待ち';
+  }
+  if (state.result) {
+    if (prior?.result && prior.match === state.match && prior.turn === turn) { render(); return; }
+    const {attack,defense,previousLife,passiveEffects} = state.result;
+    showCutin(attack,defense,order.map(seat=>previousLife[seat]),
+      passiveEffects.map(([seat,effect])=>[order.indexOf(seat),effect]));
+  } else {
+    $('.rr-cutin').hidden = true;
+    game.classList.remove('rr-judgment');
+    render();
+  }
+}
+
+async function friendRequest(op, extra = {}) {
+  if (friendBusy || !op && friendPolling) return;
+  if (op) friendBusy = true;
+  else friendPolling = true;
+  const epoch = friendEpoch;
+  const code = online?.code;
+  const url = new URL('./friend-api',location.href);
+  if (!op) url.searchParams.set('code',code);
+  try {
+    const response = await fetch(url,op ? {
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({op,code,revision:online?.revision,match:online?.match,phase:online?.phase,turn:online?.turn,...extra}),
+    } : {cache:'no-store'});
+    const state = await response.json();
+    if (epoch !== friendEpoch) return;
+    if (!response.ok) {
+      if (!op && (response.status === 403 || response.status === 404)) {
+        leaveFriend();
+        game.hidden = true;
+        $('[data-home="friend"]').onclick();
+        friendStatus.textContent = state.error;
+        return;
+      }
+      throw new Error(state.error);
+    }
+    applyOnline(state);
+    if (!friendPoll) friendPoll = setInterval(()=>friendRequest(),500);
+  } catch (error) {
+    if (epoch === friendEpoch) {
+      (game.hidden ? friendStatus : gameStatus).textContent =
+        error.message || '通信に失敗しました。';
+    }
+  } finally {
+    if (epoch === friendEpoch) {
+      if (op) friendBusy = false;
+      else friendPolling = false;
+    }
+  }
+}
+
+function leaveFriend(clearInvite = true) {
+  clearInterval(friendPoll);
+  friendPoll = null;
+  friendEpoch++;
+  friendBusy = false;
+  friendPolling = false;
+  online = null;
+  setCountdown({});
+  if (clearInvite && location.hash.startsWith('#invite=')) window.history.replaceState(null,'',location.pathname+location.search);
+  gameStatus.hidden = true;
+}
+$('[data-home="friend"]').onclick = () => {
+  lobby();
+  intro = false;
+  game.removeAttribute('data-intro');
+  home.hidden = true;
+  friend.hidden = false;
+  friendStatus.textContent = '';
+  friendCreate.hidden = false;
+  friendInvite.hidden = true;
+  friendSelect.hidden = true;
+  friendPick.disabled = false;
+  friendStart.disabled = false;
+  friendCreate.focus();
+};
+friend.querySelector('.rr-friend-back').onclick = () => {
+  leaveFriend();
+  friend.hidden = true;
+  home.hidden = false;
+  $('[data-home="friend"]').focus();
+};
+friendCreate.onclick = ()=>friendRequest('create');
+friend.querySelector('.rr-friend-copy').onclick = async () => {
+  try {
+    await navigator.clipboard.writeText(inviteField.value);
+    if (!friendInvite.hidden) friendStatus.textContent = '招待リンクをコピーしました。相手に送ってください。';
+  } catch {
+    inviteField.focus();
+    inviteField.select();
+    friendStatus.textContent = '選択したリンクをコピーして相手に送ってください。';
+  }
+};
+friendStart.onclick = ()=>friendRequest('pick',{fighter:Number(friendPick.value)});
+function joinInvite() {
+  const code = location.hash.match(/^#invite=([a-f0-9]{10})$/)?.[1];
+  if (!code || code === online?.code) return;
+  leaveFriend(false);
+  game.hidden = true;
+  $('.rr-album').hidden = true;
+  $('[data-home="friend"]').onclick();
+  friendStatus.textContent = '部屋に入室しています…';
+  friendRequest('join',{code});
+}
+window.addEventListener('hashchange',joinInvite);
+joinInvite();
+render();
+})();
+</script>
+</div>
+
+</main>
+</body>
+</html>
